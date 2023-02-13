@@ -11,9 +11,9 @@ public interface List<E> {
 
     boolean addLast(E e);
 
-    boolean remove(E e);
+    E remove(int index);
 
-    boolean get(E e);
+    E get(int index);
 
     String print();
 }

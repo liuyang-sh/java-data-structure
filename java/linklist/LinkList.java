@@ -41,6 +41,32 @@ public class LinkList<E> implements List<E> {
         size++;
     }
 
+    /**
+     * 检查是否越界
+     * @param index
+     */
+    public void checkIndexOutOf(int index) {
+        if (index >=0 && index < size) {
+            throw  new IndexOutOfBoundsException();
+        }
+    }
+
+    Node<E> node(int index){
+
+        if (index < (size>>1)) {
+            Node<E> x =first;
+            for (int i = 0; i < index; i++) {
+                x = x.next;
+            }
+            return x;
+        }else {
+            Node<E> x = last;
+            for (long i = size - 1; i > index; i--) {
+                x = x.prev;
+            }
+            return  x;
+        }
+    }
 
     @Override
     public boolean addFirst(E e) {
@@ -55,13 +81,35 @@ public class LinkList<E> implements List<E> {
     }
 
     @Override
-    public boolean remove(E e) {
-        return false;
+    public E remove(int index) {
+        checkIndexOutOf(index);
+        Node<E> removeNode = node(index);
+        final  E removeElement = removeNode.item;
+        //解绑删除节点左链和右链 重新绑定
+        Node<E> prevNode = removeNode.prev;
+        Node<E> nextNode = removeNode.next;
+        if (prevNode == null) {
+            first = nextNode;
+        } else  {
+            prevNode.next = nextNode;
+            removeNode.prev = null;
+        }
+        if (nextNode == null) {
+            last = prevNode;
+        } else {
+            nextNode.prev = prevNode;
+            removeNode.next = null;
+        }
+
+        removeNode.item = null;
+        size --;
+        return removeElement;
     }
 
     @Override
-    public boolean get(E e) {
-        return false;
+    public E get(int index) {
+        checkIndexOutOf(index);
+        return node(index).item;
     }
 
     @Override
